@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { useCart } from "../cart/CartContext.jsx";
-import { PRODUCTS, formatPrice } from "../data/products.js";
+import { CATEGORY_COLOR, PRODUCTS, formatPrice } from "../data/products.js";
 
 export function ProductDetailPage() {
   const { id } = useParams();
@@ -10,16 +10,17 @@ export function ProductDetailPage() {
   if (!product) {
     return (
       <main className="page">
-        <h1>Product not found</h1>
-        <Link to="/products">Back to catalog</Link>
+        <h1>product not found</h1>
+        <Link to="/products">back to catalog</Link>
       </main>
     );
   }
 
   return (
     <main className="page detail">
+      <span className="swatch wide" style={{ background: CATEGORY_COLOR[product.category] }} />
       <p className="crumb">
-        <Link to="/products">Catalog</Link>
+        <Link to="/products">catalog</Link>
         <span aria-hidden="true"> / </span>
         {product.title}
       </p>
@@ -28,7 +29,7 @@ export function ProductDetailPage() {
       <p className="lede">{product.description}</p>
       <p className="price">{formatPrice(product.price)}</p>
       <button type="button" className="button" onClick={() => add(product)}>
-        Add to cart
+        add to cart
       </button>
     </main>
   );

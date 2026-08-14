@@ -9,18 +9,18 @@ export function CartPage() {
     <main className="page">
       <header className="page-head">
         <div>
-          <p className="eyebrow">Checkout</p>
-          <h1>Cart</h1>
+          <p className="mono">checkout</p>
+          <h1>cart</h1>
         </div>
         {lines.length > 0 ? (
           <button type="button" className="ghost" onClick={clear}>
-            Clear
+            clear
           </button>
         ) : null}
       </header>
       {lines.length === 0 ? (
-        <p className="muted">
-          Cart is empty. <Link to="/products">Browse products</Link>
+        <p className="lede">
+          cart is empty. <Link to="/products">browse products</Link>
         </p>
       ) : (
         <>
@@ -29,10 +29,10 @@ export function CartPage() {
               <li key={line.product.id}>
                 <div>
                   <Link to={`/products/${line.product.id}`}>{line.product.title}</Link>
-                  <p className="muted">{formatPrice(line.product.price)} each</p>
+                  <p className="lede tight">{formatPrice(line.product.price)} each</p>
                 </div>
                 <label>
-                  Qty
+                  qty
                   <input
                     type="number"
                     min="0"
@@ -45,7 +45,7 @@ export function CartPage() {
               </li>
             ))}
           </ul>
-          <p className="total">Total {formatPrice(total)}</p>
+          <p className="total">total {formatPrice(total)}</p>
         </>
       )}
     </main>

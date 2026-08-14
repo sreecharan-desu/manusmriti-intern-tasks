@@ -4,12 +4,12 @@ export function SearchBar({ value, onChange, pending }) {
       <input
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        placeholder="Title, company, location, or skill"
-        aria-label="Search jobs"
+        placeholder="title, company, location, or skill"
+        aria-label="search jobs"
       />
       {pending ? (
-        <p className="muted" role="status">
-          Waiting for typing to stop…
+        <p className="mono" role="status">
+          waiting for typing to stop…
         </p>
       ) : null}
     </div>

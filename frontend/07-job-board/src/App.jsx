@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { JobCard } from "./components/JobCard.jsx";
 import { Pagination } from "./components/Pagination.jsx";
 import { SavedList } from "./components/SavedList.jsx";
 import { SearchBar } from "./components/SearchBar.jsx";
+import { SiteFooter } from "./components/SiteFooter.jsx";
+import { IconBookmark, IconSearch, blurDock } from "./components/icons.jsx";
 import { JOBS } from "./data/jobs.js";
 import { useDebouncedValue } from "./hooks/useDebouncedValue.js";
 import { useSavedJobs } from "./hooks/useSavedJobs.js";
@@ -15,6 +17,7 @@ export default function App() {
   const [page, setPage] = useState(1);
   const { savedIds, toggleSave } = useSavedJobs();
   const debouncedQuery = useDebouncedValue(query, 500);
+  const searchRef = useRef(null);
 
   useEffect(() => {
     setPage(1);
@@ -25,31 +28,57 @@ export default function App() {
   const savedJobs = JOBS.filter((job) => savedIds.includes(job.id));
 
   return (
-    <main className="page">
-      <header className="hero">
-        <p className="eyebrow">50 roles · local data</p>
-        <h1>Job board</h1>
-        <p className="lede">
-          Search is debounced 500ms so typing does not thrash the list. Ten jobs per page. Saved roles live in
-          localStorage.
-        </p>
-        <SearchBar value={query} onChange={setQuery} pending={query !== debouncedQuery} />
-        <p className="muted">
-          {filtered.length} match{filtered.length === 1 ? "" : "es"}
-          {debouncedQuery ? ` for “${debouncedQuery}”` : ""}
-        </p>
-      </header>
-      {visible.length === 0 ? (
-        <p className="empty">No roles match that search.</p>
-      ) : (
-        <ul className="jobs">
-          {visible.map((job) => (
-            <JobCard key={job.id} job={job} saved={savedIds.includes(job.id)} onToggle={toggleSave} />
-          ))}
-        </ul>
-      )}
-      {pageCount > 1 ? <Pagination page={currentPage} pageCount={pageCount} onPage={setPage} /> : null}
-      <SavedList jobs={savedJobs} onToggle={toggleSave} />
-    </main>
+    <div className="shell">
+      <div className="dock-wrap">
+        <nav className="site-dock" aria-label="primary">
+          <button
+            type="button"
+            className="dock-btn"
+            aria-label="search"
+            onPointerUp={blurDock}
+            onClick={() => searchRef.current?.querySelector("input")?.focus()}
+          >
+            <IconSearch />
+          </button>
+          <span className="dock-divider" />
+          <a className="dock-btn" href="#saved" aria-label="saved roles" onPointerUp={blurDock}>
+            <IconBookmark />
+            {savedIds.length ? <span className="dock-badge">{savedIds.length}</span> : null}
+          </a>
+        </nav>
+      </div>
+
+      <main className="page">
+        <header className="hero">
+          <p className="mono">50 roles · local data</p>
+          <h1>
+            <span>hi,</span>
+            <span>open roles</span>
+          </h1>
+          <p className="lede">
+            search waits 500ms after the last keystroke. ten jobs per page. saved roles live in localStorage.
+          </p>
+          <div ref={searchRef}>
+            <SearchBar value={query} onChange={setQuery} pending={query !== debouncedQuery} />
+          </div>
+          <p className="mono">
+            {filtered.length} match{filtered.length === 1 ? "" : "es"}
+            {debouncedQuery ? ` for “${debouncedQuery}”` : ""}
+          </p>
+        </header>
+        {visible.length === 0 ? (
+          <p className="empty">no roles match that search.</p>
+        ) : (
+          <ul className="jobs">
+            {visible.map((job) => (
+              <JobCard key={job.id} job={job} saved={savedIds.includes(job.id)} onToggle={toggleSave} />
+            ))}
+          </ul>
+        )}
+        {pageCount > 1 ? <Pagination page={currentPage} pageCount={pageCount} onPage={setPage} /> : null}
+        <SavedList jobs={savedJobs} onToggle={toggleSave} />
+      </main>
+      <SiteFooter note="bookmarks persist on this device" />
+    </div>
   );
 }

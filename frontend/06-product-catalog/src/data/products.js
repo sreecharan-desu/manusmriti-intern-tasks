@@ -87,6 +87,12 @@ export const PRODUCTS = [
 
 export const CATEGORIES = ["all", "electronics", "clothing", "home"];
 
+export const CATEGORY_COLOR = {
+  electronics: "#1f7a6c",
+  clothing: "#e25a2a",
+  home: "#e0a21b",
+};
+
 export function formatPrice(value) {
   return new Intl.NumberFormat("en-IN", {
     style: "currency",

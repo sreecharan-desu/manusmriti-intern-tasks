@@ -14,7 +14,7 @@ export default function RegisterPage() {
   async function onSubmit(event) {
     event.preventDefault();
     if (name.trim().length < 2 || !email.includes("@") || password.length < 8) {
-      setError("Name, a valid email, and a password of at least 8 characters are required.");
+      setError("name, a valid email, and a password of at least 8 characters are required.");
       return;
     }
     setPending(true);
@@ -31,19 +31,22 @@ export default function RegisterPage() {
 
   return (
     <main className="card">
-      <p className="eyebrow">Auth service</p>
-      <h1>Create account</h1>
+      <p className="mono">auth service</p>
+      <h1>
+        <span>hi,</span>
+        <span>create account</span>
+      </h1>
       <form onSubmit={onSubmit}>
         <label>
-          Name
+          name
           <input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" required />
         </label>
         <label>
-          Email
+          email
           <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoComplete="email" required />
         </label>
         <label>
-          Password
+          password
           <input
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -59,11 +62,11 @@ export default function RegisterPage() {
           </p>
         ) : null}
         <button type="submit" disabled={pending}>
-          {pending ? "Creating…" : "Sign up"}
+          {pending ? "creating…" : "sign up"}
         </button>
       </form>
-      <p>
-        Already registered? <Link to="/login">Log in</Link>
+      <p className="lede">
+        already registered? <Link to="/login">log in</Link>
       </p>
     </main>
   );

@@ -13,7 +13,7 @@ export default function LoginPage() {
   async function onSubmit(event) {
     event.preventDefault();
     if (!email.includes("@") || password.length < 8) {
-      setError("Enter a valid email and a password of at least 8 characters.");
+      setError("enter a valid email and a password of at least 8 characters.");
       return;
     }
     setPending(true);
@@ -30,16 +30,19 @@ export default function LoginPage() {
 
   return (
     <main className="card">
-      <p className="eyebrow">Auth service</p>
-      <h1>Log in</h1>
-      <p className="muted">The profile page is blocked until this returns a JWT.</p>
+      <p className="mono">auth service</p>
+      <h1>
+        <span>hi,</span>
+        <span>log in</span>
+      </h1>
+      <p className="lede">the profile page is blocked until this returns a jwt.</p>
       <form onSubmit={onSubmit}>
         <label>
-          Email
+          email
           <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoComplete="email" required />
         </label>
         <label>
-          Password
+          password
           <input
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -54,11 +57,11 @@ export default function LoginPage() {
           </p>
         ) : null}
         <button type="submit" disabled={pending}>
-          {pending ? "Signing in…" : "Log in"}
+          {pending ? "signing in…" : "log in"}
         </button>
       </form>
-      <p>
-        New here? <Link to="/register">Create an account</Link>
+      <p className="lede">
+        new here? <Link to="/register">create an account</Link>
       </p>
     </main>
   );
