@@ -1,0 +1,20 @@
+[project]
+name = "ticket-classifier"
+version = "0.1.0"
+description = "Structured LLM classifier — prompt in, validated JSON out."
+requires-python = ">=3.12"
+dependencies = ["python-dotenv>=1.0"]
+
+[project.scripts]
+classify = "ticket_classifier.__main__:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = ["pytest>=8.0"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

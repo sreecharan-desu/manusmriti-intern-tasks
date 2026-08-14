@@ -1,0 +1,51 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - backend/01-inventory-api
+          - backend/02-auth-workflow/backend
+          - backend/12-file-upload
+          - ai/07-ticket-classifier
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - name: Test
+        working-directory: ${{ matrix.project }}
+        run: |
+          uv sync --dev
+          uv run pytest -q
+
+  frontend:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - frontend/06-product-catalog
+          - frontend/07-job-board
+          - backend/02-auth-workflow/frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: ${{ matrix.project }}/package-lock.json
+      - name: Build
+        working-directory: ${{ matrix.project }}
+        run: |
+          npm ci
+          npm run build
+          if [ -f package.json ] && grep -q '"test"' package.json; then npm test --if-present; fi
