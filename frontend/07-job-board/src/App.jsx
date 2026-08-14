@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { JobCard } from "./components/JobCard.jsx";
 import { Pagination } from "./components/Pagination.jsx";
 import { SavedList } from "./components/SavedList.jsx";
 import { SearchBar } from "./components/SearchBar.jsx";
 import { SiteFooter } from "./components/SiteFooter.jsx";
-import { IconBookmark, IconSearch, blurDock } from "./components/icons.jsx";
 import { JOBS } from "./data/jobs.js";
 import { useDebouncedValue } from "./hooks/useDebouncedValue.js";
 import { useSavedJobs } from "./hooks/useSavedJobs.js";
@@ -17,7 +16,6 @@ export default function App() {
   const [page, setPage] = useState(1);
   const { savedIds, toggleSave } = useSavedJobs();
   const debouncedQuery = useDebouncedValue(query, 500);
-  const searchRef = useRef(null);
 
   useEffect(() => {
     setPage(1);
@@ -29,25 +27,6 @@ export default function App() {
 
   return (
     <div className="shell">
-      <div className="dock-wrap">
-        <nav className="site-dock" aria-label="primary">
-          <button
-            type="button"
-            className="dock-btn"
-            aria-label="search"
-            onPointerUp={blurDock}
-            onClick={() => searchRef.current?.querySelector("input")?.focus()}
-          >
-            <IconSearch />
-          </button>
-          <span className="dock-divider" />
-          <a className="dock-btn" href="#saved" aria-label="saved roles" onPointerUp={blurDock}>
-            <IconBookmark />
-            {savedIds.length ? <span className="dock-badge">{savedIds.length}</span> : null}
-          </a>
-        </nav>
-      </div>
-
       <main className="page">
         <header className="hero">
           <p className="mono">50 roles · local data</p>
@@ -58,9 +37,7 @@ export default function App() {
           <p className="lede">
             search waits 500ms after the last keystroke. ten jobs per page. saved roles live in localStorage.
           </p>
-          <div ref={searchRef}>
-            <SearchBar value={query} onChange={setQuery} pending={query !== debouncedQuery} />
-          </div>
+          <SearchBar value={query} onChange={setQuery} pending={query !== debouncedQuery} />
           <p className="mono">
             {filtered.length} match{filtered.length === 1 ? "" : "es"}
             {debouncedQuery ? ` for “${debouncedQuery}”` : ""}

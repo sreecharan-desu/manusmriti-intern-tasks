@@ -9,7 +9,6 @@
   --accent: #6b3d9a;
   --accent-2: #e07a3d;
   --glow: #f0b429;
-  --dock: rgba(253, 248, 255, 0.8);
   --shadow: 0 10px 30px -12px rgba(107, 61, 154, 0.3);
   color: var(--ink);
   background: var(--bg);
@@ -53,9 +52,12 @@ h1 span {
 
 .app {
   min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 40px 20px 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px 48px;
+  gap: 28px;
 }
 
 .card {
@@ -153,92 +155,8 @@ dt {
   text-transform: lowercase;
 }
 
-.dock-wrap {
-  position: fixed;
-  z-index: 50;
-  bottom: 22px;
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: none;
-}
-
-.site-dock {
-  pointer-events: auto;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: var(--dock);
-  border: 1px solid var(--line);
-  backdrop-filter: blur(16px);
-  box-shadow: var(--shadow);
-}
-
-.dock-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  border-radius: 999px;
-  color: var(--muted);
-  text-decoration: none;
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s, color 0.3s;
-}
-
-.dock-btn.active {
-  color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 12%, white);
-}
-
-.dock-divider {
-  width: 1px;
-  height: 16px;
-  background: var(--line);
-  margin: 0 4px;
-}
-
-@media (hover: hover) {
-  .dock-btn:hover {
-    transform: translateY(-6px) scale(1.12);
-    color: var(--ink);
-    background: color-mix(in srgb, var(--accent-2) 16%, white);
-  }
-}
-
-@media (min-width: 1024px) {
-  .dock-wrap {
-    bottom: auto;
-    top: 50%;
-    left: 20px;
-    transform: translateY(-50%);
-  }
-
-  .site-dock {
-    flex-direction: column;
-    padding: 14px 8px;
-  }
-
-  .dock-divider {
-    width: 18px;
-    height: 1px;
-    margin: 6px 0;
-  }
-}
-
 .site-footer {
-  position: fixed;
-  left: 20px;
-  right: 20px;
-  bottom: 88px;
   text-align: center;
-  pointer-events: none;
-}
-
-@media (min-width: 1024px) {
-  .site-footer {
-    bottom: 24px;
-  }
 }
 
 .site-footer p {

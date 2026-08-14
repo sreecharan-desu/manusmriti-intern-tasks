@@ -9,7 +9,6 @@
   --accent: #0e7c8b;
   --accent-2: #e05a72;
   --glow: #7b6cff;
-  --dock: rgba(245, 251, 252, 0.8);
   --shadow: 0 10px 30px -12px rgba(14, 124, 139, 0.28);
   color: var(--ink);
   background: var(--bg);
@@ -70,13 +69,7 @@ h1 span {
 .shell {
   width: min(100% - 40px, 48rem);
   margin: 0 auto;
-  padding: 40px 0 120px;
-}
-
-@media (min-width: 1024px) {
-  .shell {
-    padding-left: 72px;
-  }
+  padding: 40px 0 80px;
 }
 
 .hero {
@@ -203,93 +196,6 @@ button.saved {
   align-items: center;
   padding: 12px 0;
   border-bottom: 1px solid var(--line);
-}
-
-.dock-wrap {
-  position: fixed;
-  z-index: 50;
-  bottom: 22px;
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: none;
-}
-
-.site-dock {
-  pointer-events: auto;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: var(--dock);
-  border: 1px solid var(--line);
-  backdrop-filter: blur(16px);
-  box-shadow: var(--shadow);
-}
-
-.dock-btn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  border-radius: 999px;
-  color: var(--muted);
-  background: transparent;
-  text-decoration: none;
-  border: 0;
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s, color 0.3s;
-}
-
-.dock-divider {
-  width: 1px;
-  height: 16px;
-  background: var(--line);
-  margin: 0 4px;
-}
-
-.dock-badge {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
-  border-radius: 999px;
-  background: var(--glow);
-  color: white;
-  font-size: 10px;
-  font-weight: 700;
-  display: grid;
-  place-items: center;
-}
-
-@media (hover: hover) {
-  .dock-btn:hover {
-    transform: translateY(-6px) scale(1.12);
-    color: var(--ink);
-    background: color-mix(in srgb, var(--accent) 12%, white);
-  }
-}
-
-@media (min-width: 1024px) {
-  .dock-wrap {
-    bottom: auto;
-    top: 50%;
-    left: 20px;
-    transform: translateY(-50%);
-  }
-
-  .site-dock {
-    flex-direction: column;
-    padding: 14px 8px;
-  }
-
-  .dock-divider {
-    width: 18px;
-    height: 1px;
-    margin: 6px 0;
-  }
 }
 
 .site-footer {
