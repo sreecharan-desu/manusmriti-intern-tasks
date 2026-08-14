@@ -30,12 +30,9 @@ export default function App() {
       <main className="page">
         <header className="hero">
           <p className="mono">50 roles · local data</p>
-          <h1>
-            <span>hi,</span>
-            <span>open roles</span>
-          </h1>
+          <h1>Open roles</h1>
           <p className="lede">
-            search waits 500ms after the last keystroke. ten jobs per page. saved roles live in localStorage.
+            Search waits 500ms after the last keystroke. Ten jobs per page. Saved roles live in localStorage.
           </p>
           <SearchBar value={query} onChange={setQuery} pending={query !== debouncedQuery} />
           <p className="mono">
@@ -44,7 +41,7 @@ export default function App() {
           </p>
         </header>
         {visible.length === 0 ? (
-          <p className="empty">no roles match that search.</p>
+          <p className="empty">No roles match that search.</p>
         ) : (
           <ul className="jobs">
             {visible.map((job) => (
@@ -55,7 +52,7 @@ export default function App() {
         {pageCount > 1 ? <Pagination page={currentPage} pageCount={pageCount} onPage={setPage} /> : null}
         <SavedList jobs={savedJobs} onToggle={toggleSave} />
       </main>
-      <SiteFooter note="bookmarks persist on this device" />
+      <SiteFooter note="Bookmarks persist on this device" />
     </div>
   );
 }

@@ -10,8 +10,8 @@ export function ProductDetailPage() {
   if (!product) {
     return (
       <main className="page">
-        <h1>product not found</h1>
-        <Link to="/products">back to catalog</Link>
+        <h1>Product not found</h1>
+        <Link to="/products">Back to catalog</Link>
       </main>
     );
   }
@@ -20,7 +20,7 @@ export function ProductDetailPage() {
     <main className="page detail">
       <span className="swatch wide" style={{ background: CATEGORY_COLOR[product.category] }} />
       <p className="crumb">
-        <Link to="/products">catalog</Link>
+        <Link to="/products">Catalog</Link>
         <span aria-hidden="true"> / </span>
         {product.title}
       </p>
@@ -29,7 +29,7 @@ export function ProductDetailPage() {
       <p className="lede">{product.description}</p>
       <p className="price">{formatPrice(product.price)}</p>
       <button type="button" className="button" onClick={() => add(product)}>
-        add to cart
+        Add to cart
       </button>
     </main>
   );

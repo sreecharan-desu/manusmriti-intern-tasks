@@ -2,7 +2,7 @@
 
 Not a trained model. A Gemini/OpenAI wrapper with an allowlist.
 
-The model returns JSON. `parse.py` rejects any category that is not in the list. Same idea as a chess app that asks a model for a move and then refuses illegal ones.
+The model returns JSON. `parse.py` rejects any category that is not in the list — the same pattern as GetPGN, where a model guess is checked against chess legality before it is accepted.
 
 ```bash
 uv sync --dev

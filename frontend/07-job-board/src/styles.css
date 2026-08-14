@@ -9,26 +9,12 @@
   --accent: #0e7c8b;
   --accent-2: #e05a72;
   --glow: #7b6cff;
-  --shadow: 0 10px 30px -12px rgba(14, 124, 139, 0.28);
+  --shadow: 0 2px 8px rgba(18, 52, 60, 0.06);
   color: var(--ink);
   background: var(--bg);
-  font-family: Outfit, ui-sans-serif, system-ui, sans-serif;
-  font-size: 15px;
-  line-height: 1.7;
-}
-
-@media (min-width: 640px) {
-  :root {
-    font-size: 18px;
-    line-height: 1.75;
-  }
-}
-
-@media (min-width: 1024px) {
-  :root {
-    font-size: 19px;
-    line-height: 1.8;
-  }
+  font-family: Geist, ui-sans-serif, system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
 }
 
 * {
@@ -51,19 +37,14 @@ a {
 
 h1,
 h2 {
-  font-weight: 700;
-  letter-spacing: -0.04em;
+  font-weight: 600;
+  letter-spacing: -0.03em;
   line-height: 1.15;
-  text-transform: lowercase;
   margin: 0;
 }
 
 h1 {
-  font-size: clamp(1.875rem, 4vw, 3.25rem);
-}
-
-h1 span {
-  display: block;
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
 }
 
 .shell {
@@ -79,16 +60,14 @@ h1 span {
 .mono,
 .eyebrow,
 .clock {
-  font-family: "IBM Plex Mono", ui-monospace, monospace;
-  font-size: 0.78em;
+  font-family: "Geist Mono", ui-monospace, monospace;
+  font-size: 12px;
   color: var(--muted);
-  letter-spacing: -0.02em;
-  text-transform: lowercase;
+  letter-spacing: -0.01em;
 }
 
 .lede {
   color: var(--muted);
-  text-transform: lowercase;
 }
 
 .lede.tight {
@@ -100,7 +79,7 @@ h1 span {
   width: 100%;
   padding: 12px 14px;
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 10px;
   background: var(--paper);
   font: inherit;
   color: var(--ink);
@@ -142,16 +121,26 @@ h1 span {
 }
 
 button {
-  font: inherit;
-  cursor: pointer;
-  border-radius: 999px;
-  padding: 8px 12px;
-  text-transform: lowercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.25rem;
+  padding: 0 0.875rem;
   border: 0;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+button:active {
+  transform: scale(0.98);
 }
 
 .ghost {
-  background: transparent;
+  background: var(--paper);
   border: 1px solid var(--line);
   color: var(--ink);
 }
@@ -177,14 +166,13 @@ button.saved {
 .empty {
   padding: 32px 0;
   color: var(--muted);
-  text-transform: lowercase;
 }
 
 .saved-panel {
   margin-top: 48px;
   background: var(--paper);
   border: 1px solid var(--line);
-  border-radius: 20px;
+  border-radius: 16px;
   padding: 22px;
   scroll-margin-top: 24px;
 }
@@ -206,8 +194,8 @@ button.saved {
 
 .site-footer p {
   color: var(--muted);
-  text-transform: lowercase;
   margin: 0;
+  font-size: 13px;
 }
 
 .clock {

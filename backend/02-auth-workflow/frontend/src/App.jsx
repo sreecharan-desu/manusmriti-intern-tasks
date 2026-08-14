@@ -28,7 +28,7 @@ export default function App() {
           />
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
-        <SiteFooter note="passwords are bcrypt hashes · profile needs a jwt" />
+        <SiteFooter note="Passwords are bcrypt hashes · profile needs a JWT" />
       </div>
     </AuthProvider>
   );

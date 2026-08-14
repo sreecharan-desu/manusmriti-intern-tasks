@@ -29,7 +29,7 @@ export function SiteFooter({ note }) {
         {timeStr ? (
           <>
             {" "}
-            · <span className="clock">{timeStr} ist</span>
+            · <span className="clock">{timeStr} IST</span>
           </>
         ) : null}
       </p>

@@ -6,17 +6,13 @@ export function HomePage() {
   return (
     <main className="page">
       <header className="hero">
-        <p className="mono">twelve products · local data</p>
-        <h1>
-          <span>hi,</span>
-          <span>this is the shop</span>
-        </h1>
+        <p className="mono">Twelve products · local data</p>
+        <h1>A small catalog with a cart that survives routes</h1>
         <p className="lede">
-          filter by category, sort by price, open a product, add it to a cart that survives navigation and
-          refresh.
+          Filter by category, sort by price, open a product, add it to the cart. Quantities persist after refresh.
         </p>
         <Link className="button" to="/products">
-          browse the catalog
+          Browse catalog
         </Link>
       </header>
       <ul className="grid">

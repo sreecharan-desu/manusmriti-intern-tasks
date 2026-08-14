@@ -7,21 +7,25 @@ export function Layout({ children }) {
   const { count, total } = useCart();
 
   return (
-    <div className="shell">
+    <div className="app">
       <header className="topnav">
-        <NavLink to="/" className="brand" end>
-          northwind
-        </NavLink>
-        <nav aria-label="primary">
-          <NavLink to="/products">catalog</NavLink>
-          <NavLink to="/cart">
-            cart{count ? ` · ${count}` : ""}
-            {count ? <span className="nav-total">{formatPrice(total)}</span> : null}
+        <div className="nav-inner">
+          <NavLink to="/" className="brand" end>
+            Northwind
           </NavLink>
-        </nav>
+          <nav aria-label="Primary">
+            <NavLink to="/products">Catalog</NavLink>
+            <NavLink to="/cart">
+              Cart{count ? ` · ${count}` : ""}
+              {count ? <span className="nav-total">{formatPrice(total)}</span> : null}
+            </NavLink>
+          </nav>
+        </div>
       </header>
-      {children}
-      <SiteFooter note="cart stays across routes and refresh" />
+      <div className="shell">
+        {children}
+        <SiteFooter note="Cart stays across routes and refresh" />
+      </div>
     </div>
   );
 }

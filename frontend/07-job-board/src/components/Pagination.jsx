@@ -1,8 +1,8 @@
 export function Pagination({ page, pageCount, onPage }) {
   return (
-    <nav className="pager" aria-label="pagination">
+    <nav className="pager" aria-label="Pagination">
       <button type="button" className="ghost" disabled={page === 1} onClick={() => onPage(page - 1)}>
-        previous
+        Previous
       </button>
       {Array.from({ length: pageCount }, (_, index) => index + 1).map((number) => (
         <button
@@ -15,7 +15,7 @@ export function Pagination({ page, pageCount, onPage }) {
         </button>
       ))}
       <button type="button" className="ghost" disabled={page === pageCount} onClick={() => onPage(page + 1)}>
-        next
+        Next
       </button>
     </nav>
   );

@@ -17,7 +17,7 @@ export function JobCard({ job, saved, onToggle }) {
         </p>
       </div>
       <button type="button" className={saved ? "saved" : "ghost"} onClick={() => onToggle(job.id)}>
-        {saved ? "saved" : "save"}
+        {saved ? "Saved" : "Save"}
       </button>
     </li>
   );

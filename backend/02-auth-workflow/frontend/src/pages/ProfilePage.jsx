@@ -29,11 +29,8 @@ export default function ProfilePage() {
 
   return (
     <main className="card">
-      <p className="mono">protected</p>
-      <h1>
-        <span>hi,</span>
-        <span>profile</span>
-      </h1>
+      <p className="mono">Protected</p>
+      <h1>Profile</h1>
       {error ? (
         <p className="error" role="alert">
           {error}
@@ -41,18 +38,18 @@ export default function ProfilePage() {
       ) : null}
       {user ? (
         <dl>
-          <dt>name</dt>
+          <dt>Name</dt>
           <dd>{user.name}</dd>
-          <dt>email</dt>
+          <dt>Email</dt>
           <dd>{user.email}</dd>
-          <dt>user id</dt>
+          <dt>User ID</dt>
           <dd>{user.id}</dd>
         </dl>
       ) : (
-        <p className="lede">loading protected data…</p>
+        <p className="lede">Loading protected data…</p>
       )}
       <button type="button" onClick={onLogout}>
-        log out
+        Log out
       </button>
     </main>
   );

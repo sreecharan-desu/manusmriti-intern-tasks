@@ -17,12 +17,12 @@ export function ProductsPage() {
     <main className="page">
       <header className="page-head">
         <div>
-          <p className="mono">catalog</p>
-          <h1>products</h1>
+          <p className="mono">Catalog</p>
+          <h1>Products</h1>
         </div>
         <div className="controls">
           <label>
-            category
+            Category
             <select value={category} onChange={(event) => setCategory(event.target.value)}>
               {CATEGORIES.map((item) => (
                 <option key={item} value={item}>
@@ -32,10 +32,10 @@ export function ProductsPage() {
             </select>
           </label>
           <label>
-            sort
+            Sort
             <select value={sort} onChange={(event) => setSort(event.target.value)}>
-              <option value="price-asc">price · low to high</option>
-              <option value="price-desc">price · high to low</option>
+              <option value="price-asc">Price · low to high</option>
+              <option value="price-desc">Price · high to low</option>
             </select>
           </label>
         </div>
@@ -52,7 +52,7 @@ export function ProductsPage() {
             <div className="row">
               <strong>{formatPrice(product.price)}</strong>
               <button type="button" onClick={() => add(product)}>
-                add to cart
+                Add to cart
               </button>
             </div>
           </li>
