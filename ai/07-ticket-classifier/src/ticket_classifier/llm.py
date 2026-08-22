@@ -5,33 +5,55 @@ import os
 import urllib.error
 import urllib.request
 
+_PLACEHOLDERS = frozenset({"", "CHANGE_ME", "replace-me"})
+
 
 class LlmError(RuntimeError):
     pass
 
 
+def _secret(name: str) -> str:
+    value = os.getenv(name, "").strip()
+    if value in _PLACEHOLDERS:
+        return ""
+    return value
+
+
 def complete(prompt: str) -> str:
-    gemini_key = os.getenv("GEMINI_API_KEY", "").strip()
-    openai_key = os.getenv("OPENAI_API_KEY", "").strip()
+    gemini_key = _secret("GEMINI_API_KEY")
+    groq_key = _secret("GROQ_API_KEY")
+    openai_key = _secret("OPENAI_API_KEY")
     if gemini_key:
         return _gemini(prompt, gemini_key)
+    if groq_key:
+        return _openai_compatible(
+            prompt,
+            openai_key=groq_key,
+            url="https://api.groq.com/openai/v1/chat/completions",
+            model=os.getenv("GROQ_MODEL", "llama-3.1-8b-instant"),
+        )
     if openai_key:
-        return _openai(prompt, openai_key)
-    raise LlmError("No GEMINI_API_KEY or OPENAI_API_KEY set")
+        return _openai_compatible(
+            prompt,
+            openai_key=openai_key,
+            url="https://api.openai.com/v1/chat/completions",
+            model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
+        )
+    raise LlmError("No GEMINI_API_KEY, GROQ_API_KEY, or OPENAI_API_KEY set")
 
 
-def _openai(prompt: str, api_key: str) -> str:
+def _openai_compatible(prompt: str, *, openai_key: str, url: str, model: str) -> str:
     body = json.dumps(
         {
-            "model": os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
+            "model": model,
             "temperature": 0,
             "messages": [{"role": "user", "content": prompt}],
         }
     ).encode("utf-8")
     request = urllib.request.Request(
-        "https://api.openai.com/v1/chat/completions",
+        url,
         data=body,
-        headers={"Content-Type": "application/json", "Authorization": f"Bearer {api_key}"},
+        headers={"Content-Type": "application/json", "Authorization": f"Bearer {openai_key}"},
         method="POST",
     )
     try:

@@ -14,9 +14,12 @@ Optional `.env`:
 
 ```
 GEMINI_API_KEY=
+GROQ_API_KEY=
 # or
 OPENAI_API_KEY=
 ```
+
+Provider order: Gemini → Groq (`llama-3.1-8b-instant`) → OpenAI. Placeholder values such as `CHANGE_ME` are ignored.
 
 If no key is set, an offline keyword fallback still returns one of the seven categories so the CLI and tests run.
 
