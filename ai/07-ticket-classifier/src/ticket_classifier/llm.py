@@ -6,12 +6,6 @@ import urllib.error
 import urllib.request
 
 _PLACEHOLDERS = frozenset({"", "CHANGE_ME", "replace-me"})
-_GEMINI_MODELS = (
-    "gemini-2.5-flash",
-    "gemini-2.0-flash",
-    "gemini-1.5-flash",
-    "gemini-flash-latest",
-)
 
 
 class LlmError(RuntimeError):
@@ -34,26 +28,40 @@ def configured_providers() -> dict[str, bool]:
 
 
 def complete(prompt: str) -> str:
+    """Call the first healthy provider. Groq first — Gemini 404s on this key/model."""
     errors: list[str] = []
-    gemini_key = _secret("GEMINI_API_KEY")
     groq_key = _secret("GROQ_API_KEY")
+    gemini_key = _secret("GEMINI_API_KEY")
     openai_key = _secret("OPENAI_API_KEY")
 
+    if groq_key:
+        groq_models = []
+        for name in (
+            os.getenv("GROQ_MODEL", "llama-3.1-8b-instant"),
+            "llama-3.1-8b-instant",
+            "llama-3.3-70b-versatile",
+            "openai/gpt-oss-20b",
+        ):
+            if name and name not in groq_models:
+                groq_models.append(name)
+        last_groq: LlmError | None = None
+        for model in groq_models:
+            try:
+                return _openai_compatible(
+                    prompt,
+                    api_key=groq_key,
+                    url="https://api.groq.com/openai/v1/chat/completions",
+                    model=model,
+                )
+            except LlmError as exc:
+                last_groq = exc
+        if last_groq:
+            errors.append(f"groq: {last_groq}")
     if gemini_key:
         try:
             return _gemini(prompt, gemini_key)
         except LlmError as exc:
             errors.append(f"gemini: {exc}")
-    if groq_key:
-        try:
-            return _openai_compatible(
-                prompt,
-                api_key=groq_key,
-                url="https://api.groq.com/openai/v1/chat/completions",
-                model=os.getenv("GROQ_MODEL", "llama-3.1-8b-instant"),
-            )
-        except LlmError as exc:
-            errors.append(f"groq: {exc}")
     if openai_key:
         try:
             return _openai_compatible(
@@ -91,39 +99,42 @@ def _openai_compatible(prompt: str, *, api_key: str, url: str, model: str) -> st
 
 
 def _gemini(prompt: str, api_key: str) -> str:
-    preferred = os.getenv("GEMINI_MODEL", "").strip()
     models: list[str] = []
-    for name in (preferred, *_GEMINI_MODELS):
+    for name in (
+        os.getenv("GEMINI_MODEL", "").strip(),
+        "gemini-3.5-flash",
+        "gemini-3.6-flash",
+        "gemini-2.5-flash",
+        "gemini-2.0-flash",
+        "gemini-flash-latest",
+    ):
         if name and name not in models:
             models.append(name)
-
     last_error: LlmError | None = None
     body = json.dumps({"contents": [{"parts": [{"text": prompt}]}]}).encode("utf-8")
     for model in models:
-        for version in ("v1beta", "v1"):
-            url = f"https://generativelanguage.googleapis.com/{version}/models/{model}:generateContent?key={api_key}"
-            request = urllib.request.Request(
-                url,
-                data=body,
-                headers={"Content-Type": "application/json"},
-                method="POST",
-            )
-            try:
-                payload = _json_request(request)
-                return payload["candidates"][0]["content"]["parts"][0]["text"]
-            except LlmError as exc:
-                last_error = exc
-                if "HTTP 404" not in str(exc) and "HTTP 400" not in str(exc):
-                    raise
-            except (KeyError, IndexError, TypeError) as exc:
-                last_error = LlmError("Gemini returned an unexpected payload")
-                raise last_error from exc
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+        request = urllib.request.Request(
+            url,
+            data=body,
+            headers={"Content-Type": "application/json", "x-goog-api-key": api_key},
+            method="POST",
+        )
+        try:
+            payload = _json_request(request)
+            return payload["candidates"][0]["content"]["parts"][0]["text"]
+        except LlmError as exc:
+            last_error = exc
+            if "HTTP 404" not in str(exc) and "HTTP 400" not in str(exc):
+                raise
+        except (KeyError, IndexError, TypeError) as exc:
+            raise LlmError("Gemini returned an unexpected payload") from exc
     raise last_error or LlmError("Gemini request failed")
 
 
 def _json_request(request: urllib.request.Request) -> dict:
     try:
-        with urllib.request.urlopen(request, timeout=45) as response:
+        with urllib.request.urlopen(request, timeout=20) as response:
             return json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as exc:
         raise LlmError(f"HTTP {exc.code}") from exc

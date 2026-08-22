@@ -41,5 +41,7 @@ def _classify_locked(cleaned: str, *, allow_offline: bool) -> dict:
             parsed = parse_classification(raw)
             parsed["mode"] = "llm_retry"
             return parsed
-        except (LlmError, ParseError):
-            return classify_offline(cleaned)
+        except (LlmError, ParseError) as exc:
+            result = classify_offline(cleaned)
+            result["fallback"] = str(exc)[:240]
+            return result

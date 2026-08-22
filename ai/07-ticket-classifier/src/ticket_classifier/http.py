@@ -90,7 +90,7 @@ _PAGE = """<!doctype html>
   </head>
   <body>
     <main>
-      <p class="mono">Allowlist · no training</p>
+      <p class="mono">Allowlist · no training · <span id="status">checking keys…</span></p>
       <h1>Classify a support message</h1>
       <p class="mono">Same-text requests share one model call. Others wait on a lock, then 429 if still busy.</p>
       <form id="form">
@@ -139,6 +139,19 @@ _PAGE = """<!doctype html>
       };
       tick();
       setInterval(tick, 1000);
+      fetch("/health", { cache: "no-store" })
+        .then((r) => r.json())
+        .then((body) => {
+          const ready = Object.entries(body.providers || {})
+            .filter(([, on]) => on)
+            .map(([name]) => name);
+          document.getElementById("status").textContent = ready.length
+            ? `model on · ${ready.join(" · ")}`
+            : "offline fallback only";
+        })
+        .catch(() => {
+          document.getElementById("status").textContent = "health check failed";
+        });
     </script>
   </body>
 </html>
