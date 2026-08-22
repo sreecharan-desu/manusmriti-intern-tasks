@@ -43,7 +43,11 @@ def classify_route(body: MessageIn) -> dict:
     try:
         return classify(body.message)
     except BusyError as exc:
-        raise HTTPException(status_code=429, detail=str(exc)) from exc
+        raise HTTPException(
+            status_code=429,
+            detail=str(exc),
+            headers={"Retry-After": "2"},
+        ) from exc
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
@@ -86,7 +90,7 @@ _PAGE = """<!doctype html>
     <main>
       <p class="mono">Allowlist · no training</p>
       <h1>Classify a support message</h1>
-      <p class="mono">One in-flight request. Concurrent calls wait on a lock, then 429 if still busy.</p>
+      <p class="mono">Same-text requests share one model call. Others wait on a lock, then 429 if still busy.</p>
       <form id="form">
         <textarea name="message" maxlength="8000" required placeholder="My order hasn't arrived yet."></textarea>
         <button type="submit">Classify</button>

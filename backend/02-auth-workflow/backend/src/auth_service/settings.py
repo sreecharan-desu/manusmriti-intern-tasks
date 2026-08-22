@@ -10,7 +10,10 @@ JWT_ALG = "HS256"
 TOKEN_HOURS = int(os.getenv("AUTH_TOKEN_HOURS", "12"))
 CORS_ORIGINS = [
     origin.strip()
-    for origin in os.getenv("AUTH_CORS_ORIGINS", "http://127.0.0.1:5173,http://localhost:5173").split(",")
+    for origin in os.getenv(
+        "AUTH_CORS_ORIGINS",
+        "http://127.0.0.1:5173,http://localhost:5173,https://manusmriti-auth-ui.vercel.app",
+    ).split(",")
     if origin.strip()
 ]
 CORS_ORIGIN_REGEX = os.getenv("AUTH_CORS_ORIGIN_REGEX", r"https://([a-z0-9-]+\.)*vercel\.app")

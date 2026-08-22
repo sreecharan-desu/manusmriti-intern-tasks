@@ -6,7 +6,6 @@ bcrypt password hashing, JWT access tokens, and a React UI for register / login 
 # API — http://127.0.0.1:8000
 cd backend
 uv sync --dev
-cp .env.example .env   # optional
 uv run pytest -q
 uv run auth-service
 ```

@@ -60,3 +60,12 @@ def test_concurrent_classify_uses_lock() -> None:
     with ThreadPoolExecutor(max_workers=4) as pool:
         results = list(pool.map(classify, [message] * 4))
     assert all(item["category"] == "other" for item in results)
+
+
+def test_lock_times_out_when_held() -> None:
+    from ticket_classifier.lock import BusyError, classify_lock
+
+    with classify_lock(timeout=1):
+        with pytest.raises(BusyError):
+            with classify_lock(timeout=0):
+                pass

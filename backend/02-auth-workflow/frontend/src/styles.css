@@ -8,15 +8,13 @@
   --line: #e0d0ea;
   --accent: #6b3d9a;
   --accent-2: #e07a3d;
-  --glow: #f0b429;
   --danger: #be123c;
   --danger-bg: #fff1f2;
-  --shadow: 0 2px 8px rgba(42, 22, 56, 0.08);
   color: var(--ink);
   background: var(--bg);
   font-family: Geist, ui-sans-serif, system-ui, sans-serif;
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.55;
 }
 
 * {
@@ -27,17 +25,17 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(1000px 500px at 10% -10%, var(--wash-1), transparent 58%),
-    radial-gradient(800px 420px at 100% 0%, var(--wash-2), transparent 50%),
+    radial-gradient(900px 480px at 8% -12%, var(--wash-1), transparent 56%),
+    radial-gradient(720px 380px at 100% 0%, var(--wash-2), transparent 48%),
     var(--bg);
 }
 
 h1 {
   font-weight: 600;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.035em;
   line-height: 1.15;
-  margin: 0 0 8px;
-  font-size: clamp(1.75rem, 3vw, 2.1rem);
+  margin: 0 0 6px;
+  font-size: 1.75rem;
 }
 
 .app {
@@ -46,17 +44,17 @@ h1 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px 48px;
-  gap: 28px;
+  padding: 48px 20px;
+  gap: 24px;
 }
 
 .card {
-  width: min(420px, 100%);
-  background: var(--paper);
+  width: min(400px, 100%);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
   border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 28px;
-  box-shadow: var(--shadow);
+  border-radius: 18px;
+  padding: 28px 26px 24px;
+  backdrop-filter: blur(16px);
 }
 
 .mono,
@@ -70,6 +68,7 @@ h1 {
 
 .lede {
   color: var(--muted);
+  margin: 0 0 4px;
 }
 
 label,
@@ -81,19 +80,18 @@ button {
 }
 
 label {
-  margin: 12px 0;
-  font-size: 0.85em;
+  margin: 14px 0 0;
+  font-size: 0.82em;
   color: var(--muted);
 }
 
 input {
   margin-top: 6px;
-  padding: 10px 12px;
+  padding: 11px 12px;
   border: 1px solid var(--line);
   border-radius: 10px;
   background: #fff;
   color: var(--ink);
-  text-transform: none;
 }
 
 input:focus-visible,
@@ -103,9 +101,8 @@ button:focus-visible {
 }
 
 button {
-  margin-top: 12px;
+  margin-top: 18px;
   height: 2.5rem;
-  padding: 0 1.25rem;
   border: 0;
   border-radius: 10px;
   background: var(--accent);
@@ -113,7 +110,6 @@ button {
   cursor: pointer;
   font-size: 13px;
   font-weight: 500;
-  transition: all 0.15s ease;
 }
 
 button:disabled {
@@ -125,13 +121,9 @@ button:hover:not(:disabled) {
   filter: brightness(0.97);
 }
 
-button:active:not(:disabled) {
-  transform: scale(0.98);
-}
-
 a {
   color: var(--accent);
-  text-underline-offset: 4px;
+  text-underline-offset: 3px;
 }
 
 .error {
@@ -140,16 +132,22 @@ a {
   border-radius: 10px;
   padding: 10px 12px;
   font-size: 13px;
+  margin-top: 12px;
 }
 
 dl {
   display: grid;
-  grid-template-columns: 100px 1fr;
-  gap: 8px 12px;
+  grid-template-columns: 72px 1fr;
+  gap: 10px 12px;
+  margin: 18px 0 4px;
 }
 
 dt {
   color: var(--muted);
+}
+
+dd {
+  margin: 0;
 }
 
 .site-footer {

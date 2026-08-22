@@ -20,4 +20,5 @@ dist/
 storage/
 uploads/
 auth.sqlite
+inventory.sqlite
 uploads.sqlite
