@@ -4,6 +4,7 @@ Debounced search (500ms), 10 jobs per page, bookmarks in `localStorage`. Fifty l
 
 ```bash
 npm install
+npm test
 npm run dev
 ```
 

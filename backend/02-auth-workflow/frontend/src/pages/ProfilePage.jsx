@@ -3,12 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth.jsx";
 
 export default function ProfilePage() {
-  const { profile, logout } = useAuth();
+  const { profile, logout, user: cached } = useAuth();
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(cached);
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (cached) {
+      setUser(cached);
+      return;
+    }
     let cancelled = false;
     profile()
       .then((data) => {
@@ -20,7 +24,7 @@ export default function ProfilePage() {
     return () => {
       cancelled = true;
     };
-  }, [profile]);
+  }, [cached, profile]);
 
   function onLogout() {
     logout();
@@ -42,8 +46,6 @@ export default function ProfilePage() {
           <dd>{user.name}</dd>
           <dt>Email</dt>
           <dd>{user.email}</dd>
-          <dt>User ID</dt>
-          <dd>{user.id}</dd>
         </dl>
       ) : (
         <p className="lede">Loading protected data…</p>

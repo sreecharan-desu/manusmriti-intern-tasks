@@ -7,6 +7,7 @@ import sys
 from dotenv import load_dotenv
 
 from ticket_classifier.classify import classify
+from ticket_classifier.lock import BusyError
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -20,7 +21,7 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("Provide a customer message")
     try:
         result = classify(message, allow_offline=not args.no_offline)
-    except ValueError as exc:
+    except (ValueError, BusyError) as exc:
         print(str(exc), file=sys.stderr)
         return 1
     print(json.dumps(result, indent=2))

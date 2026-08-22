@@ -16,8 +16,8 @@ export function Layout({ children }) {
           <nav aria-label="Primary">
             <NavLink to="/products">Catalog</NavLink>
             <NavLink to="/cart">
-              Cart{count ? ` · ${count}` : ""}
-              {count ? <span className="nav-total">{formatPrice(total)}</span> : null}
+              Cart · {count}
+              <span className="nav-total">{formatPrice(total)}</span>
             </NavLink>
           </nav>
         </div>

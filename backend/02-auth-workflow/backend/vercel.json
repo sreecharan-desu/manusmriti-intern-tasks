@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "env": {
+    "PYTHONPATH": "src",
+    "AUTH_DB_PATH": "/tmp/auth.sqlite"
+  },
+  "functions": {
+    "app.py": {
+      "maxDuration": 15,
+      "includeFiles": "src/**",
+      "excludeFiles": "{tests/**,.venv/**,**/*.md}"
+    }
+  }
+}

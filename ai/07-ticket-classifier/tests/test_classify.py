@@ -1,3 +1,5 @@
+from concurrent.futures import ThreadPoolExecutor
+
 import pytest
 
 from ticket_classifier.classify import classify
@@ -51,3 +53,10 @@ def test_confidence_out_of_range() -> None:
 def test_blank_json_object_rejected() -> None:
     with pytest.raises(ParseError):
         parse_classification("{}")
+
+
+def test_concurrent_classify_uses_lock() -> None:
+    message = "What time does your warehouse close on Sundays?"
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        results = list(pool.map(classify, [message] * 4))
+    assert all(item["category"] == "other" for item in results)

@@ -6,6 +6,7 @@ from sqlite3 import IntegrityError
 
 from inventory_api.db import db, row_to_product
 from inventory_api.schemas import ProductIn, ProductList, ProductOut
+from inventory_api.settings import CORS_ORIGIN_REGEX, CORS_ORIGINS
 
 app = FastAPI(
     title="Inventory API",
@@ -14,10 +15,19 @@ app = FastAPI(
 )
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5173", "http://localhost:5173"],
+    allow_origins=CORS_ORIGINS,
+    allow_origin_regex=CORS_ORIGIN_REGEX,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def no_store(request, call_next):
+    response = await call_next(request)
+    response.headers.setdefault("Cache-Control", "no-store")
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    return response
 
 
 @app.get("/health")

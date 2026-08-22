@@ -13,3 +13,4 @@ CORS_ORIGINS = [
     for origin in os.getenv("AUTH_CORS_ORIGINS", "http://127.0.0.1:5173,http://localhost:5173").split(",")
     if origin.strip()
 ]
+CORS_ORIGIN_REGEX = os.getenv("AUTH_CORS_ORIGIN_REGEX", r"https://([a-z0-9-]+\.)*vercel\.app")

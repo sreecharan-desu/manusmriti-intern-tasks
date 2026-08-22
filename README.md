@@ -47,6 +47,10 @@ uv run classify "My order hasn't arrived yet."
 
 Copy `.env.example` where you want keys. Classifier works without an API key (offline fallback). Auth uses `AUTH_JWT_SECRET`.
 
+Do not commit real keys. Vercel env vars are placeholders until you paste production values in the dashboard.
+
+SQLite and upload storage on Vercel live under `/tmp` (ephemeral between cold starts). The same apps use a local disk file when you run them with uv.
+
 ## What each task proves
 
 **Inventory API.** CRUD with Pydantic validation, unique SKU (`409` on conflict), SKU normalization, pagination, and a SQLite health check.
@@ -60,6 +64,20 @@ Copy `.env.example` where you want keys. Classifier works without an API key (of
 **Job board.** Fifty local jobs. Search waits 500ms after the last keystroke. Ten results per page. Saved jobs persist. `filterJobs` / `paginate` are pure functions with Node tests.
 
 **Ticket classifier.** Prompt → Gemini or OpenAI → JSON → allowlist. Illegal categories are rejected in `parse.py`. Empty input never hits the model. One retry, then a keyword fallback so the CLI demos without keys.
+
+## Production
+
+Each app is its own Vercel project. APIs set `Cache-Control: no-store`. The classifier serializes overlapping model calls with a thread lock plus a file lock and returns `429` if the wait budget is exceeded. The auth UI caches `/profile` for the session so React Strict Mode does not double-fetch.
+
+| App | Production URL |
+| --- | --- |
+| Auth API | _deploying_ |
+| Inventory API | _deploying_ |
+| Upload API | _deploying_ |
+| Auth UI | _deploying_ |
+| Job board | _deploying_ |
+| Catalog | _deploying_ |
+| Ticket classifier | _deploying_ |
 
 ## Ports
 

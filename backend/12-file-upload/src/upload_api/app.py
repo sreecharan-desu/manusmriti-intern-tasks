@@ -4,17 +4,34 @@ import uuid
 from pathlib import Path
 
 from fastapi import FastAPI, File, HTTPException, UploadFile, status
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
 from upload_api.db import db
 from upload_api.images import ALLOWED_TYPES, sniff_image_type
-from upload_api.settings import MAX_BYTES, STORAGE_DIR
+from upload_api.settings import CORS_ORIGIN_REGEX, CORS_ORIGINS, MAX_BYTES, STORAGE_DIR
 
 app = FastAPI(
     title="File upload API",
     description="JPEG/PNG uploads only. 5MB cap. Type is taken from file magic, not the client Content-Type.",
     version="1.0.0",
 )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=CORS_ORIGINS,
+    allow_origin_regex=CORS_ORIGIN_REGEX,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.middleware("http")
+async def no_store(request, call_next):
+    response = await call_next(request)
+    if not request.url.path.startswith("/files/"):
+        response.headers.setdefault("Cache-Control", "no-store")
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    return response
 
 
 @app.get("/health")

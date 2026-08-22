@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "env": {
+    "PYTHONPATH": "src",
+    "CLASSIFY_LOCK_PATH": "/tmp/ticket-classifier.lock",
+    "CLASSIFY_LOCK_TIMEOUT": "30"
+  },
+  "functions": {
+    "app.py": {
+      "maxDuration": 60,
+      "includeFiles": "src/**",
+      "excludeFiles": "{tests/**,.venv/**,**/*.md}"
+    }
+  }
+}

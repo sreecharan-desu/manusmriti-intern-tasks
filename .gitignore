@@ -1,3 +1,6 @@
+.vercel
+tasks-given/
+
 .venv/
 .uv/
 __pycache__/

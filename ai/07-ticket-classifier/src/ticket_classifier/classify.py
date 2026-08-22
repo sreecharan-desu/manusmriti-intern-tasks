@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from ticket_classifier.llm import LlmError, complete
+from ticket_classifier.lock import classify_lock
 from ticket_classifier.offline import classify_offline
 from ticket_classifier.parse import ParseError, parse_classification
 from ticket_classifier.prompts import build_prompt
@@ -11,6 +12,11 @@ def classify(message: str, *, allow_offline: bool = True) -> dict:
     if not cleaned:
         raise ValueError("Text input cannot be empty.")
 
+    with classify_lock():
+        return _classify_locked(cleaned, allow_offline=allow_offline)
+
+
+def _classify_locked(cleaned: str, *, allow_offline: bool) -> dict:
     prompt = build_prompt(cleaned)
     try:
         raw = complete(prompt)
@@ -26,5 +32,4 @@ def classify(message: str, *, allow_offline: bool = True) -> dict:
             parsed["mode"] = "llm_retry"
             return parsed
         except (LlmError, ParseError):
-            result = classify_offline(cleaned)
-            return result
+            return classify_offline(cleaned)

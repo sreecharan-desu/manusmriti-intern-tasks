@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "env": {
+    "PYTHONPATH": "src",
+    "INVENTORY_DB_PATH": "/tmp/inventory.sqlite"
+  },
+  "functions": {
+    "app.py": {
+      "maxDuration": 15,
+      "includeFiles": "src/**",
+      "excludeFiles": "{tests/**,.venv/**,**/*.md}"
+    }
+  }
+}

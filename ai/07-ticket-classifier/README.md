@@ -20,6 +20,12 @@ OPENAI_API_KEY=
 
 If no key is set, an offline keyword fallback still returns one of the seven categories so the CLI and tests run.
 
-Pipeline: empty input → reject · prompt with allowed categories · LLM JSON · parse/allowlist · one retry · offline fallback.
+Concurrent classify calls share a thread lock and a file lock (`CLASSIFY_LOCK_PATH`). Empty input is rejected before the lock. If the lock wait exceeds `CLASSIFY_LOCK_TIMEOUT`, the HTTP API returns `429`.
+
+```bash
+uv run uvicorn ticket_classifier.http:app --host 127.0.0.1 --port 8003
+```
+
+Pipeline: empty input → reject · lock · prompt with allowed categories · LLM JSON · parse/allowlist · one retry · offline fallback.
 
 Allowed: `order_issue` `return_request` `payment_issue` `account_issue` `product_information` `complaint` `other`
