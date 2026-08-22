@@ -48,12 +48,7 @@ def complete(prompt: str) -> str:
             errors.append(f"gemini: {exc}")
     if groq_key:
         try:
-            return _openai_compatible(
-                prompt,
-                api_key=groq_key,
-                url="https://api.groq.com/openai/v1/chat/completions",
-                model=os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
-            )
+            return _groq(prompt, groq_key)
         except LlmError as exc:
             errors.append(f"groq: {exc}")
     if openai_key:
@@ -69,6 +64,40 @@ def complete(prompt: str) -> str:
     if errors:
         raise LlmError("; ".join(errors))
     raise LlmError("No GEMINI_API_KEY, GROQ_API_KEY, or OPENAI_API_KEY set")
+
+
+_GROQ_MODELS = ("openai/gpt-oss-120b", "openai/gpt-oss-20b")
+_GROQ_RETIRED = {
+    "llama-3.1-8b-instant",
+    "llama-3.3-70b-versatile",
+    "llama-3.1-70b-versatile",
+}
+
+
+def _groq(prompt: str, api_key: str) -> str:
+    # Verified with curl (2026-08-22): gpt-oss-120b / gpt-oss-20b → 200.
+    # llama-3.1-8b-instant and llama-3.3-70b-versatile → 404 on this key.
+    preferred = os.getenv("GROQ_MODEL", "").strip()
+    if preferred in _GROQ_RETIRED:
+        preferred = "openai/gpt-oss-120b"
+    models: list[str] = []
+    for name in (preferred, *_GROQ_MODELS):
+        if name and name not in models:
+            models.append(name)
+    last_error: LlmError | None = None
+    for model in models:
+        try:
+            return _openai_compatible(
+                prompt,
+                api_key=api_key,
+                url="https://api.groq.com/openai/v1/chat/completions",
+                model=model,
+            )
+        except LlmError as exc:
+            last_error = exc
+            if "HTTP 404" not in str(exc) and "HTTP 400" not in str(exc):
+                raise
+    raise last_error or LlmError("Groq request failed")
 
 
 def _openai_compatible(prompt: str, *, api_key: str, url: str, model: str) -> str:
