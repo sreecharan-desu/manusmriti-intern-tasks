@@ -3,6 +3,8 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
+os.environ.pop("MONGO_URI", None)
+os.environ.pop("MAIL_API_URL", None)
 os.environ["AUTH_DB_PATH"] = str(Path("/tmp") / "manusmriti-auth-test.sqlite")
 os.environ["AUTH_JWT_SECRET"] = "test-secret-must-be-at-least-32-bytes"
 

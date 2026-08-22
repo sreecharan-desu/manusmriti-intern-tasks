@@ -4,6 +4,7 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
+os.environ.pop("MONGO_URI", None)
 os.environ["UPLOAD_DB_PATH"] = str(Path("/tmp") / "manusmriti-upload-test.sqlite")
 os.environ["UPLOAD_STORAGE_DIR"] = str(Path("/tmp") / "manusmriti-upload-storage")
 

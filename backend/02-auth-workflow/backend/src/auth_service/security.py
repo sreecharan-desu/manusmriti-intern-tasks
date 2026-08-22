@@ -8,7 +8,7 @@ import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
-from auth_service.db import db
+from auth_service.repo import get_user_by_id
 from auth_service.schemas import Profile
 from auth_service.settings import JWT_ALG, JWT_SECRET, TOKEN_HOURS
 
@@ -46,8 +46,7 @@ def current_user(
             headers={"WWW-Authenticate": "Bearer"},
         ) from exc
 
-    with db() as connection:
-        row = connection.execute("SELECT id, email, name FROM users WHERE id = ?", (user_id,)).fetchone()
+    row = get_user_by_id(user_id)
     if row is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
