@@ -17,7 +17,16 @@ class TokenResponse(BaseModel):
     token_type: str = "bearer"
 
 
+class VerifyBody(BaseModel):
+    token: str = Field(min_length=16, max_length=200)
+
+
+class ResendBody(BaseModel):
+    email: EmailStr
+
+
 class Profile(BaseModel):
     id: int
     email: str
     name: str
+    email_verified: bool = True

@@ -32,7 +32,7 @@ export default function LoginPage() {
     <main className="card">
       <p className="mono">Auth service</p>
       <h1>Log in</h1>
-      <p className="lede">The profile page is blocked until this returns a JWT.</p>
+      <p className="lede">Sign-in is blocked until the verification email is confirmed.</p>
       <form onSubmit={onSubmit}>
         <label>
           Email
@@ -59,6 +59,8 @@ export default function LoginPage() {
       </form>
       <p className="lede">
         New here? <Link to="/register">Create an account</Link>
+        {" · "}
+        <Link to="/check-email">Resend verification</Link>
       </p>
     </main>
   );

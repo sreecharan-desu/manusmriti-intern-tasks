@@ -2,7 +2,9 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "env": {
     "PYTHONPATH": "src",
-    "AUTH_DB_PATH": "/tmp/auth.sqlite"
+    "AUTH_DB_PATH": "/tmp/auth.sqlite",
+    "AUTH_UI_URL": "https://manusmriti-auth-ui.vercel.app",
+    "MAIL_PROVIDER": "nodemailer"
   },
   "functions": {
     "app.py": {

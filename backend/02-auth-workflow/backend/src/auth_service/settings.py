@@ -17,3 +17,5 @@ CORS_ORIGINS = [
     if origin.strip()
 ]
 CORS_ORIGIN_REGEX = os.getenv("AUTH_CORS_ORIGIN_REGEX", r"https://([a-z0-9-]+\.)*vercel\.app")
+AUTH_UI_URL = os.getenv("AUTH_UI_URL", "https://manusmriti-auth-ui.vercel.app").rstrip("/")
+VERIFY_HOURS = int(os.getenv("AUTH_VERIFY_HOURS", "24"))

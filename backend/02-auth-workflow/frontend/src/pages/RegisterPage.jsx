@@ -20,8 +20,9 @@ export default function RegisterPage() {
     setPending(true);
     setError("");
     try {
-      await register({ name, email, password });
-      navigate("/login");
+      const created = await register({ name, email, password });
+      const sent = created.mail_sent ? "1" : "0";
+      navigate(`/check-email?email=${encodeURIComponent(email)}&sent=${sent}`);
     } catch (err) {
       setError(err.message);
     } finally {

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import secrets
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
@@ -10,7 +11,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from auth_service.repo import get_user_by_id
 from auth_service.schemas import Profile
-from auth_service.settings import JWT_ALG, JWT_SECRET, TOKEN_HOURS
+from auth_service.settings import JWT_ALG, JWT_SECRET, TOKEN_HOURS, VERIFY_HOURS
 
 bearer = HTTPBearer(auto_error=True)
 
@@ -21,6 +22,12 @@ def hash_password(password: str) -> str:
 
 def verify_password(password: str, password_hash: str) -> bool:
     return bcrypt.checkpw(password.encode("utf-8"), password_hash.encode("utf-8"))
+
+
+def new_verification() -> tuple[str, str]:
+    token = secrets.token_urlsafe(32)
+    expires = (datetime.now(timezone.utc) + timedelta(hours=VERIFY_HOURS)).isoformat()
+    return token, expires
 
 
 def create_token(user_id: int, email: str) -> str:
@@ -53,4 +60,9 @@ def current_user(
             detail="User not found",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    return Profile(id=row["id"], email=row["email"], name=row["name"])
+    return Profile(
+        id=row["id"],
+        email=row["email"],
+        name=row["name"],
+        email_verified=bool(row.get("email_verified", True)),
+    )

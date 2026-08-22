@@ -46,6 +46,8 @@ export default function ProfilePage() {
           <dd>{user.name}</dd>
           <dt>Email</dt>
           <dd>{user.email}</dd>
+          <dt>Verified</dt>
+          <dd>{user.email_verified ? "yes" : "no"}</dd>
         </dl>
       ) : (
         <p className="lede">Loading protected data…</p>

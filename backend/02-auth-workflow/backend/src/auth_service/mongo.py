@@ -59,4 +59,5 @@ def _ensure_indexes(collection) -> None:
         return
     collection.create_index([("id", ASCENDING)], unique=True)
     collection.create_index([("email", ASCENDING)], unique=True)
+    collection.create_index([("verification_token", ASCENDING)], unique=True, sparse=True)
     _indexed = True

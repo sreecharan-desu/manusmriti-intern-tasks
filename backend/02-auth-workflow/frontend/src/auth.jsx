@@ -32,6 +32,28 @@ export function AuthProvider({ children }) {
         if (!response.ok) throw new Error(detailMessage(body, "Registration failed"));
         return body;
       },
+      async verify(token) {
+        const response = await fetch(`${API}/verify`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "omit",
+          body: JSON.stringify({ token }),
+        });
+        const body = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(detailMessage(body, "Verification failed"));
+        return body;
+      },
+      async resend(email) {
+        const response = await fetch(`${API}/resend-verification`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "omit",
+          body: JSON.stringify({ email }),
+        });
+        const body = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(detailMessage(body, "Could not resend"));
+        return body;
+      },
       async login(payload) {
         const response = await fetch(`${API}/login`, {
           method: "POST",

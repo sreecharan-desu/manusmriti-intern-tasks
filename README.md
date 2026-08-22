@@ -35,7 +35,7 @@ Copy `.env.example` for local keys. Do not commit real secrets. Classifier works
 
 ## What each task proves
 
-**Auth.** Passwords stored only as bcrypt hashes. Login returns a JWT. `/profile` requires `Authorization: Bearer`. Duplicate email is `409`. The UI keeps the token in `sessionStorage` and fetches `/profile` once per session.
+**Auth.** Passwords stored only as bcrypt hashes. Register sends a verification email via nodemailer. Login returns a JWT only after that inbox is confirmed (`403` until then). `/profile` requires `Authorization: Bearer`. Duplicate email is `409`. The UI keeps the token in `sessionStorage` and fetches `/profile` once per session.
 
 **File upload.** Multipart `POST /uploads`. Size cap is `413`. Type is sniffed from magic bytes, so a PDF renamed to `.png` is `415`. Stored names are UUIDs; download paths are sanitized.
 
@@ -49,6 +49,7 @@ Each app is its own Vercel project. APIs set `Cache-Control: no-store`. SQLite a
 | --- | --- |
 | Auth API | https://manusmriti-auth-api.vercel.app |
 | Auth UI | https://manusmriti-auth-ui.vercel.app |
+| Auth mailer (nodemailer) | https://manusmriti-mail-api.vercel.app |
 | Upload API | https://manusmriti-upload-api.vercel.app |
 | Ticket classifier | https://manusmriti-ticket-classifier.vercel.app |
 

@@ -126,13 +126,22 @@ a {
   text-underline-offset: 3px;
 }
 
-.error {
-  background: var(--danger-bg);
-  color: var(--danger);
+.error,
+.ok {
   border-radius: 10px;
   padding: 10px 12px;
   font-size: 13px;
   margin-top: 12px;
+}
+
+.error {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.ok {
+  background: #ecfdf3;
+  color: #166534;
 }
 
 dl {
