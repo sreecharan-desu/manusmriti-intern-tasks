@@ -6,6 +6,14 @@ import urllib.error
 import urllib.request
 
 _PLACEHOLDERS = frozenset({"", "CHANGE_ME", "replace-me"})
+# Verified with curl against this project's GEMINI_API_KEY (2026-08-22):
+# gemini-2.0-flash / 2.5-flash → 404 retired
+# gemini-3.6-flash, gemini-3.5-flash → 200 on v1beta and v1
+_GEMINI_MODELS = (
+    "gemini-3.6-flash",
+    "gemini-3.5-flash",
+    "gemini-3-flash-preview",
+)
 
 
 class LlmError(RuntimeError):
@@ -28,40 +36,26 @@ def configured_providers() -> dict[str, bool]:
 
 
 def complete(prompt: str) -> str:
-    """Call the first healthy provider. Groq first — Gemini 404s on this key/model."""
     errors: list[str] = []
-    groq_key = _secret("GROQ_API_KEY")
     gemini_key = _secret("GEMINI_API_KEY")
+    groq_key = _secret("GROQ_API_KEY")
     openai_key = _secret("OPENAI_API_KEY")
 
-    if groq_key:
-        groq_models = []
-        for name in (
-            os.getenv("GROQ_MODEL", "llama-3.1-8b-instant"),
-            "llama-3.1-8b-instant",
-            "llama-3.3-70b-versatile",
-            "openai/gpt-oss-20b",
-        ):
-            if name and name not in groq_models:
-                groq_models.append(name)
-        last_groq: LlmError | None = None
-        for model in groq_models:
-            try:
-                return _openai_compatible(
-                    prompt,
-                    api_key=groq_key,
-                    url="https://api.groq.com/openai/v1/chat/completions",
-                    model=model,
-                )
-            except LlmError as exc:
-                last_groq = exc
-        if last_groq:
-            errors.append(f"groq: {last_groq}")
     if gemini_key:
         try:
             return _gemini(prompt, gemini_key)
         except LlmError as exc:
             errors.append(f"gemini: {exc}")
+    if groq_key:
+        try:
+            return _openai_compatible(
+                prompt,
+                api_key=groq_key,
+                url="https://api.groq.com/openai/v1/chat/completions",
+                model=os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
+            )
+        except LlmError as exc:
+            errors.append(f"groq: {exc}")
     if openai_key:
         try:
             return _openai_compatible(
@@ -100,14 +94,10 @@ def _openai_compatible(prompt: str, *, api_key: str, url: str, model: str) -> st
 
 def _gemini(prompt: str, api_key: str) -> str:
     models: list[str] = []
-    for name in (
-        os.getenv("GEMINI_MODEL", "").strip(),
-        "gemini-3.5-flash",
-        "gemini-3.6-flash",
-        "gemini-2.5-flash",
-        "gemini-2.0-flash",
-        "gemini-flash-latest",
-    ):
+    preferred = os.getenv("GEMINI_MODEL", "").strip()
+    if preferred in {"gemini-2.0-flash", "gemini-2.5-flash", "gemini-2.5-flash-lite"}:
+        preferred = "gemini-3.6-flash"
+    for name in (preferred, *_GEMINI_MODELS):
         if name and name not in models:
             models.append(name)
     last_error: LlmError | None = None
