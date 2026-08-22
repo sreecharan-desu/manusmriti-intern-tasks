@@ -1,0 +1,32 @@
+---
+description: Current Manusmriti intern submission scope and live URLs
+alwaysApply: true
+---
+
+# Submission scope
+
+This repo’s **in-scope apps** are only:
+
+1. `backend/12-file-upload` — File Upload API
+2. `backend/02-auth-workflow/backend` — Auth API
+3. `backend/02-auth-workflow/frontend` — Auth UI
+4. `ai/07-ticket-classifier` — Ticket classifier (CLI + HTTP)
+
+Those trees were deleted from the repo. Do not recreate inventory, catalog, job-board, or `backend/platform-api` unless the user explicitly asks.
+
+## Live URLs
+
+- Auth UI: https://manusmriti-auth-ui.vercel.app
+- Auth API: https://manusmriti-auth-api.vercel.app
+- Upload API: https://manusmriti-upload-api.vercel.app
+- Ticket classifier: https://manusmriti-ticket-classifier.vercel.app
+
+## Deploy / secrets
+
+- Do not read `.env` or `.env.local`. Use Vercel env names only.
+- Classifier providers: Gemini → Groq → OpenAI. `GROQ_API_KEY` is the fallback when OpenAI is unavailable.
+- Leave the three official packets in the repo root unchanged if present.
+
+## Author
+
+Sreecharan Desu · B.Tech CS, IIIT Andhra Pradesh · 2027
