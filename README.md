@@ -71,13 +71,13 @@ Each app is its own Vercel project. APIs set `Cache-Control: no-store`. The clas
 
 | App | Production URL |
 | --- | --- |
-| Auth API | _deploying_ |
-| Inventory API | _deploying_ |
-| Upload API | _deploying_ |
-| Auth UI | _deploying_ |
-| Job board | _deploying_ |
-| Catalog | _deploying_ |
-| Ticket classifier | _deploying_ |
+| Auth API | https://manusmriti-auth-api.vercel.app |
+| Inventory API | https://manusmriti-inventory-api.vercel.app |
+| Upload API | https://manusmriti-upload-api.vercel.app |
+| Auth UI | https://manusmriti-auth-ui.vercel.app |
+| Job board | https://manusmriti-job-board.vercel.app |
+| Catalog | https://manusmriti-northwind-catalog.vercel.app |
+| Ticket classifier | https://manusmriti-ticket-classifier.vercel.app |
 
 ## Ports
 
