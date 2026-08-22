@@ -6,6 +6,7 @@ from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 
 from ticket_classifier.classify import classify
+from ticket_classifier.llm import configured_providers
 from ticket_classifier.lock import BusyError
 
 app = FastAPI(
@@ -35,7 +36,8 @@ async def no_store(request, call_next):
 
 @app.get("/health")
 def health() -> dict:
-    return {"ok": True}
+    providers = configured_providers()
+    return {"ok": True, "llm": any(providers.values()), "providers": providers}
 
 
 @app.post("/classify")
